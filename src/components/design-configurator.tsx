@@ -16,6 +16,7 @@ import {
 } from 'lucide-react'
 import { Button } from './ui/button'
 import Card from './card'
+import fileDownload from 'js-file-download'
 
 export function DesignConfigurador() {
   const uploadImageButton = useRef<HTMLInputElement>(null)
@@ -149,6 +150,8 @@ export function DesignConfigurador() {
       const blob = base64ToBlob(base64Data, 'image/png')
       const file = new File([blob], 'filename.png', { type: 'image/png' })
       setSaveImage(file)
+
+      fileDownload(blob, 'filename.png')
     } catch (error) {}
   }
 
@@ -192,11 +195,11 @@ export function DesignConfigurador() {
       <div
         ref={containerRef}
         className="relative h-[37.5rem] overflow-hidden col-span-2 w-full max-w-4xl flex items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-4 md:p-12 text-center focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
-        <div className="relative w-[400px] bg-opacity-50 pointer-events-none aspect-[1004/650]">
+        <div className="relative w-[400px] bg-opacity-50 pointer-events-none aspect-[1011/638]">
           <AspectRatio
             ref={cardRef}
-            ratio={1004 / 650}
-            className="pointer-events-none aspect-[1004/650] w-full">
+            ratio={1011 / 638} // Proporção exata do cartão de crédito
+            className="pointer-events-none aspect-[1011/638] w-full">
             <NextImage
               fill
               src={'/card.png'}
@@ -204,12 +207,16 @@ export function DesignConfigurador() {
               className="pointer-events-none select-none"
             />
           </AspectRatio>
+
           <div className="absolute z-40 inset-0 left-[3px] top-px right-[3px] bottom-px rounded-[12px] shadow-[0_0_0_99999px_rgba(229,231,235,0.6)]" />
         </div>
 
         {selectedImages.map(({ degrees, index, url }, i) => (
           <Rnd
-            className="absolute z-20 border-[2px] border-blue-600"
+            className="absolute border-[2px] border-blue-600"
+            style={{
+              zIndex: index,
+            }}
             default={{
               x: 150,
               y: 205,
@@ -240,11 +247,10 @@ export function DesignConfigurador() {
               className="w-full h-full"
               style={{
                 transform: `rotate(${degrees}deg)`, // Aplica a rotação
-                zIndex: index + 40,
               }}>
               <NextImage
                 src={url}
-                alt="NextImage"
+                alt="image"
                 fill
                 className="pointer-events-none"
               />
@@ -272,7 +278,7 @@ export function DesignConfigurador() {
                   <Button asChild variant={'outline'}>
                     <label htmlFor="add">
                       <Plus className="size-5 mr-2" />
-                      Add NextImage
+                      Add Image
                       <input
                         id="add"
                         ref={uploadImageButton}
