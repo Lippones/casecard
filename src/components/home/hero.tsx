@@ -5,7 +5,7 @@ import { CardMockup } from './card-mockup'
 
 export function Hero() {
   return (
-    <div className="relative h-svh w-full px-8 pt-32 overflow-hidden">
+    <div className="relative h-svh w-full px-8 pt-32">
       <div className="absolute inset-0">
         <OrbitingBackground />
       </div>
@@ -30,7 +30,7 @@ export function Hero() {
           </Button>
         </div>
       </div>
-      <div className="absolute flex w-full justify-center -bottom-12">
+      <div className="absolute flex w-full justify-center -bottom-12 overflow-hidden">
         <CardMockup className="-rotate-12 relative top-16" />
         <CardMockup isPrimary className="relative z-20" />
         <CardMockup className="rotate-12 relative top-16" />
