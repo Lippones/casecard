@@ -150,8 +150,6 @@ export function DesignConfigurador() {
       const blob = base64ToBlob(base64Data, 'image/png')
       const file = new File([blob], 'filename.png', { type: 'image/png' })
       setSaveImage(file)
-
-      fileDownload(blob, 'filename.png')
     } catch (error) {}
   }
 
