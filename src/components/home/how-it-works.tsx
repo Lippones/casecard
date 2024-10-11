@@ -93,7 +93,7 @@ const steps = [
 
 export async function HowItWorks() {
   return (
-    <div className="h-svh flex flex-col gap-10 justify-center mx-auto container w-full">
+    <div className="flex flex-col gap-10 justify-center mx-auto container w-full pt-20 md:pt-10 px-4 md:px-8">
       <h2 className="text-4xl font-bold">Como funciona</h2>
       <BentoGrid className="lg:grid-rows-3">
         {steps.map((step) => (
