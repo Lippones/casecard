@@ -2,7 +2,7 @@
 
 import NextImage from 'next/image'
 import { AspectRatio } from './ui/aspect-ratio'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Rnd } from 'react-rnd'
 import { HandleComponent } from './handle-component'
 import { ScrollArea } from './ui/scroll-area'
@@ -15,6 +15,8 @@ import {
 } from 'lucide-react'
 import { Button } from './ui/button'
 import { Separator } from './ui/separator'
+import { convertJsonToBuffer } from '@/utils/convert-json-to-buffer'
+import { convertBufferToJson } from '@/utils/convert-buffer-to-json'
 
 export function DesignConfigurador() {
   const uploadImageButton = useRef<HTMLInputElement>(null)
@@ -46,12 +48,12 @@ export function DesignConfigurador() {
         index: selectedImages.length,
         degrees: 0,
         renderedDimension: {
-          height: 300,
-          width: 300,
+          width: 420,
+          height: 420,
         },
         renderedPosition: {
-          x: 150,
-          y: 205,
+          x: containerRef.current!.offsetWidth / 2 - 150,
+          y: containerRef.current!.offsetHeight / 2 - 150,
         },
       },
     ])
@@ -210,52 +212,54 @@ export function DesignConfigurador() {
           <div className="absolute z-40 inset-0 left-[3px] top-px right-[3px] bottom-px shadow-[0_0_0_99999px_rgba(23,23,23,0.4)]" />
         </div>
 
-        {selectedImages.map(({ degrees, index, url }, i) => (
-          <Rnd
-            className="absolute border-4 border-blue-600"
-            style={{
-              zIndex: index,
-            }}
-            default={{
-              x: containerRef.current!.offsetWidth / 2 - 150,
-              y: containerRef.current!.offsetHeight / 2 - 150,
-              width: 420,
-              height: 420,
-            }}
-            key={url}
-            onResizeStop={(_, __, ref, ___, { x, y }) => {
-              setRenderedPositionAndDimension({
-                height: Number.parseInt(ref.style.height.slice(0, -2)),
-                width: Number.parseInt(ref.style.width.slice(0, -2)),
-                x,
-                y,
-                url,
-              })
-            }}
-            onDragStop={(_, data) => {
-              const { x, y } = data
-              setRenderedPositionAndDimension({ x, y, url })
-            }}
-            resizeHandleComponent={{
-              bottomLeft: <HandleComponent />,
-              bottomRight: <HandleComponent />,
-              topLeft: <HandleComponent />,
-              topRight: <HandleComponent />,
-            }}>
-            <div
-              className="w-full h-full"
+        {selectedImages.map(
+          ({ degrees, index, url, renderedDimension, renderedPosition }, i) => (
+            <Rnd
+              className="absolute border-4 border-blue-600"
               style={{
-                transform: `rotate(${degrees}deg)`, // Aplica a rotação
+                zIndex: index,
+              }}
+              default={{
+                height: renderedDimension.height,
+                width: renderedDimension.width,
+                x: renderedPosition.x,
+                y: renderedPosition.y,
+              }}
+              key={url}
+              onResizeStop={(_, __, ref, ___, { x, y }) => {
+                setRenderedPositionAndDimension({
+                  height: Number.parseInt(ref.style.height.slice(0, -2)),
+                  width: Number.parseInt(ref.style.width.slice(0, -2)),
+                  x,
+                  y,
+                  url,
+                })
+              }}
+              onDragStop={(_, data) => {
+                const { x, y } = data
+                setRenderedPositionAndDimension({ x, y, url })
+              }}
+              resizeHandleComponent={{
+                bottomLeft: <HandleComponent />,
+                bottomRight: <HandleComponent />,
+                topLeft: <HandleComponent />,
+                topRight: <HandleComponent />,
               }}>
-              <NextImage
-                src={url}
-                alt="image"
-                fill
-                className="pointer-events-none"
-              />
-            </div>
-          </Rnd>
-        ))}
+              <div
+                className="w-full h-full"
+                style={{
+                  transform: `rotate(${degrees}deg)`, // Aplica a rotação
+                }}>
+                <NextImage
+                  src={url}
+                  alt="image"
+                  fill
+                  className="pointer-events-none"
+                />
+              </div>
+            </Rnd>
+          ),
+        )}
       </div>
 
       <div className="h-full flex flex-col bg-card border-l">
