@@ -7,6 +7,7 @@ export const env = createEnv({
     AWS_ACCESS_KEY_ID: z.string(),
     AWS_SECRET_ACCESS_KEY: z.string(),
     AWS_BUCKET_NAME: z.string(),
+    DATABASE_URL: z.string()
   },
   experimental__runtimeEnv: process.env,
 })
