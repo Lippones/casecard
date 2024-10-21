@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Button } from '../ui/button'
 import { OrbitingBackground } from './orbiting-background'
 import { CardMockup } from './card-mockup'
+import { Suspense } from 'react'
 
 export function Hero() {
   return (

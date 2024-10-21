@@ -3,11 +3,27 @@ import { z } from 'zod'
 
 export const env = createEnv({
   server: {
+    NODE_ENV: z.enum(['development', 'production']).default('development'),
     AWS_REGION: z.string(),
     AWS_ACCESS_KEY_ID: z.string(),
     AWS_SECRET_ACCESS_KEY: z.string(),
     AWS_BUCKET_NAME: z.string(),
-    DATABASE_URL: z.string()
+    DATABASE_URL: z.string(),
+    STRIPE_SECRET_KEY: z.string(),
+    STRIPE_PRICE_ID: z.string(),
   },
-  experimental__runtimeEnv: process.env,
+  client: {
+    NEXT_PUBLIC_STRIPE_PUBLIC_KEY: z.string(),
+  },
+  runtimeEnv: {
+    NODE_ENV: process.env.NODE_ENV,
+    AWS_REGION: process.env.AWS_REGION,
+    AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
+    AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
+    AWS_BUCKET_NAME: process.env.AWS_BUCKET_NAME,
+    DATABASE_URL: process.env.DATABASE_URL,
+    STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
+    NEXT_PUBLIC_STRIPE_PUBLIC_KEY: process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY,
+    STRIPE_PRICE_ID: process.env.STRIPE_PRICE_ID,
+  },
 })

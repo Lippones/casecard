@@ -15,13 +15,17 @@ import {
 } from 'lucide-react'
 import { Button } from './ui/button'
 import { Separator } from './ui/separator'
-import { convertJsonToBuffer } from '@/utils/convert-json-to-buffer'
-import { convertBufferToJson } from '@/utils/convert-buffer-to-json'
+
+import { type DeliveryOption, PreviewDialog } from './preview-dialog'
+import { finishCustomization } from '@/actions/finish-customization'
+import { uploadFile } from '@/actions/upload-file'
 
 export function DesignConfigurador() {
   const uploadImageButton = useRef<HTMLInputElement>(null)
   const cardRef = useRef<HTMLDivElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
+
+  const [previewFile, setPreviewFile] = useState<File | null>(null)
 
   const [selectedImages, setSelectedImages] = useState<
     {
@@ -121,11 +125,20 @@ export function DesignConfigurador() {
       const leftOffset = cardLeft - containerLeft
       const topOffset = cardTop - containerTop
 
+      // Criar o canvas original para desenhar as imagens
       const canvas = document.createElement('canvas')
       canvas.width = width
       canvas.height = height
 
       const ctx = canvas.getContext('2d')
+
+      if (!ctx) {
+        // TODO: messagem de error
+        return
+      }
+
+      ctx.fillStyle = '#CCEC60' // Cor de fundo
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
 
       for (const image of selectedImages) {
         const actualX = image.renderedPosition.x - leftOffset
@@ -134,10 +147,12 @@ export function DesignConfigurador() {
         const userImage = new Image()
         userImage.crossOrigin = 'anonymous'
         userImage.src = image.url
+
         // biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
         await new Promise((resolve) => (userImage.onload = resolve))
 
-        ctx?.drawImage(
+        // Desenhar a imagem no canvas original
+        ctx.drawImage(
           userImage,
           actualX,
           actualY,
@@ -146,14 +161,74 @@ export function DesignConfigurador() {
         )
       }
 
-      const base64 = canvas.toDataURL()
+      // Criar um novo canvas para o upscale
+      const upscaleCanvas = document.createElement('canvas')
+      // Garante o tamanho correto do cartão
+      const upscaleWidth = 1011
+      const upscaleHeight = 638
+      upscaleCanvas.width = upscaleWidth
+      upscaleCanvas.height = upscaleHeight
+
+      const upscaleCtx = upscaleCanvas.getContext('2d')
+
+      if (!upscaleCtx) {
+        // TODO: messagem de error
+        return
+      }
+
+      // Adicionar arredondamento ao canvas
+      const borderRadius = 37
+      upscaleCtx.beginPath()
+      upscaleCtx.moveTo(borderRadius, 0)
+      upscaleCtx.lineTo(upscaleWidth - borderRadius, 0)
+      upscaleCtx.quadraticCurveTo(upscaleWidth, 0, upscaleWidth, borderRadius)
+      upscaleCtx.lineTo(upscaleWidth, upscaleHeight - borderRadius)
+      upscaleCtx.quadraticCurveTo(
+        upscaleWidth,
+        upscaleHeight,
+        upscaleWidth - borderRadius,
+        upscaleHeight,
+      )
+      upscaleCtx.lineTo(borderRadius, upscaleHeight)
+      upscaleCtx.quadraticCurveTo(
+        0,
+        upscaleHeight,
+        0,
+        upscaleHeight - borderRadius,
+      )
+      upscaleCtx.lineTo(0, borderRadius)
+      upscaleCtx.quadraticCurveTo(0, 0, borderRadius, 0)
+      upscaleCtx.closePath()
+      upscaleCtx.clip() // Aplicar a máscara de arredondamento
+
+      upscaleCtx.fillStyle = '#CCEC60' // Cor de fundo
+      upscaleCtx.fillRect(0, 0, upscaleCanvas.width, upscaleCanvas.height) // Preencher o canvas
+
+      // Desenhar o canvas original no canvas upscale após aplicar o arredondamento
+      upscaleCtx.drawImage(
+        canvas,
+        0,
+        0,
+        width,
+        height,
+        0,
+        0,
+        upscaleWidth,
+        upscaleHeight,
+      )
+
+      // Gerar a imagem final como base64
+      const base64 = upscaleCanvas.toDataURL()
       const base64Data = base64.split(',')[1]
 
       const blob = base64ToBlob(base64Data, 'image/png')
       const file = new File([blob], 'filename.png', { type: 'image/png' })
 
-      // TODO: Implementar a lógica de salvar a imagem
-    } catch (error) {}
+      setPreviewFile(file)
+    } catch (error) {
+      console.error(error)
+      //TODO: Messagem de error
+    }
   }
 
   function base64ToBlob(base64: string, mimeType: string) {
@@ -189,6 +264,32 @@ export function DesignConfigurador() {
     })
 
     setSelectedImages(newArray)
+  }
+
+  async function onSubmit({
+    delivery,
+    email,
+  }: {
+    email: string
+    delivery: DeliveryOption
+  }) {
+    try {
+      if (!previewFile) {
+        // TODO: Messagem de error
+        return
+      }
+
+      const { url, accessKey } = await uploadFile(previewFile)
+
+      await finishCustomization({
+        email,
+        imageUrl: url,
+        deliveryMethod: delivery,
+        accessKey,
+      })
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
@@ -354,6 +455,14 @@ export function DesignConfigurador() {
           </div>
         </ScrollArea>
       </div>
+
+      {previewFile && (
+        <PreviewDialog
+          handleClose={() => setPreviewFile(null)}
+          onSubmit={onSubmit}
+          imageUrl={URL.createObjectURL(previewFile)}
+        />
+      )}
     </div>
   )
 }
