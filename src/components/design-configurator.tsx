@@ -2,7 +2,7 @@
 
 import NextImage from 'next/image'
 import { AspectRatio } from './ui/aspect-ratio'
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { Rnd } from 'react-rnd'
 import { HandleComponent } from './handle-component'
 import { ScrollArea } from './ui/scroll-area'
@@ -19,6 +19,10 @@ import { Separator } from './ui/separator'
 import { type DeliveryOption, PreviewDialog } from './preview-dialog'
 import { finishCustomization } from '@/actions/finish-customization'
 import { uploadFile } from '@/actions/upload-file'
+
+import { loadStripe } from '@stripe/stripe-js'
+import { env } from '@/env'
+import { createCheckout } from '@/actions/create-checkout'
 
 export function DesignConfigurador() {
   const uploadImageButton = useRef<HTMLInputElement>(null)
@@ -281,12 +285,35 @@ export function DesignConfigurador() {
 
       const { url, accessKey } = await uploadFile(previewFile)
 
-      await finishCustomization({
+      const data = await finishCustomization({
         email,
         imageUrl: url,
         deliveryMethod: delivery,
         accessKey,
       })
+
+      if (!data?.data) {
+        return
+      }
+
+      const { purschase, user } = data.data
+
+      const stripeClient = await loadStripe(env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY)
+
+      if (!stripeClient) throw new Error('Stripe failed to initialize.')
+
+      const session = await createCheckout({
+        imageUrl: url,
+        purchaseId: purschase[0].id,
+        userId: user[0].id,
+      })
+
+      if (!session?.data) {
+        return
+      }
+
+      const { id } = session.data
+      await stripeClient.redirectToCheckout({ sessionId: id })
     } catch (error) {
       console.log(error)
     }

@@ -26,30 +26,47 @@ export const finishCustomization = createSafeActionClient()
         .where(eq(user.email, email))
 
       if (userAlreadyExists.length > 0) {
-        await db.insert(purchase).values({
-          imageUrl,
-          priceId: env.STRIPE_PRICE_ID,
-          value: decimalValue.toString(),
-          paymentStatus: 'unpaid',
-          deliveryMethod,
-          accessKey,
-        })
+        const purschase = await db
+          .insert(purchase)
+          .values({
+            imageUrl,
+            priceId: env.STRIPE_PRICE_ID,
+            value: decimalValue.toString(),
+            paymentStatus: 'unpaid',
+            deliveryMethod,
+            accessKey,
+          })
+          .returning()
 
-        return
+        return {
+          purschase,
+          user: userAlreadyExists,
+        }
       }
 
-      await Promise.all([
-        db.insert(user).values({
-          email,
-        }),
-        db.insert(purchase).values({
-          imageUrl,
-          priceId: env.STRIPE_PRICE_ID,
-          value: decimalValue.toString(),
-          paymentStatus: 'unpaid',
-          deliveryMethod,
-          accessKey,
-        }),
+      const [userData, purchaseData] = await Promise.all([
+        db
+          .insert(user)
+          .values({
+            email,
+          })
+          .returning(),
+        db
+          .insert(purchase)
+          .values({
+            imageUrl,
+            priceId: env.STRIPE_PRICE_ID,
+            value: decimalValue.toString(),
+            paymentStatus: 'unpaid',
+            deliveryMethod,
+            accessKey,
+          })
+          .returning(),
       ])
+
+      return {
+        user: userData,
+        purschase: purchaseData,
+      }
     },
   )

@@ -20,7 +20,7 @@
     "@radix-ui/react-scroll-area": "^1.1.0",
     "@radix-ui/react-separator": "^1.1.0",
     "@radix-ui/react-slot": "^1.1.0",
-    "@stripe/stripe-js": "^4.8.0",
+    "@stripe/stripe-js": "^4.9.0",
     "@t3-oss/env-nextjs": "^0.11.1",
     "@types/fabric": "^5.3.9",
     "class-variance-authority": "^0.7.0",
