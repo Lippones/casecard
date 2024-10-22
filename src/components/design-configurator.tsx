@@ -303,9 +303,8 @@ export function DesignConfigurador() {
       if (!stripeClient) throw new Error('Stripe failed to initialize.')
 
       const session = await createCheckout({
-        imageUrl: url,
         purchaseId: purschase[0].id,
-        userId: user[0].id,
+        email: user.email,
       })
 
       if (!session?.data) {

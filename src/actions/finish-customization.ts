@@ -35,38 +35,39 @@ export const finishCustomization = createSafeActionClient()
             paymentStatus: 'unpaid',
             deliveryMethod,
             accessKey,
+            userId: userAlreadyExists[0].id,
           })
           .returning()
 
         return {
           purschase,
-          user: userAlreadyExists,
+          user: userAlreadyExists[0],
         }
       }
 
-      const [userData, purchaseData] = await Promise.all([
-        db
-          .insert(user)
-          .values({
-            email,
-          })
-          .returning(),
-        db
-          .insert(purchase)
-          .values({
-            imageUrl,
-            priceId: env.STRIPE_PRICE_ID,
-            value: decimalValue.toString(),
-            paymentStatus: 'unpaid',
-            deliveryMethod,
-            accessKey,
-          })
-          .returning(),
-      ])
+      const createdUser = await db
+        .insert(user)
+        .values({
+          email,
+        })
+        .returning()
+
+      const createdPurchase = await db
+        .insert(purchase)
+        .values({
+          imageUrl,
+          priceId: env.STRIPE_PRICE_ID,
+          value: decimalValue.toString(),
+          paymentStatus: 'unpaid',
+          deliveryMethod,
+          accessKey,
+          userId: createdUser[0].id,
+        })
+        .returning()
 
       return {
-        user: userData,
-        purschase: purchaseData,
+        purschase: createdPurchase,
+        user: createdUser[0],
       }
     },
   )

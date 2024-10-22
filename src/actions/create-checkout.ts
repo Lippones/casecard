@@ -6,14 +6,13 @@ import { headers } from 'next/headers'
 import { z } from 'zod'
 
 const createCheckoutSchema = z.object({
-  userId: z.number(),
   purchaseId: z.number(),
-  imageUrl: z.string().url(),
+  email: z.string(),
 })
 
 export const createCheckout = createSafeActionClient()
   .schema(createCheckoutSchema)
-  .action(async ({ parsedInput: { purchaseId, userId, imageUrl } }) => {
+  .action(async ({ parsedInput: { purchaseId, email } }) => {
     const header = await headers()
 
     const origin = header.get('origin')
@@ -26,12 +25,12 @@ export const createCheckout = createSafeActionClient()
         },
       ],
       mode: 'payment',
+      customer_email: email,
       payment_method_types: ['card'],
       success_url: `${origin}/sucesso`,
       cancel_url: `${origin}/`,
       metadata: {
         purchaseId,
-        userId,
       },
     })
 

@@ -1,0 +1,1 @@
+ALTER TABLE "purchases" ADD COLUMN "userId" integer NOT NULL;

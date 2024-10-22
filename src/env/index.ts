@@ -11,6 +11,7 @@ export const env = createEnv({
     DATABASE_URL: z.string(),
     STRIPE_SECRET_KEY: z.string(),
     STRIPE_PRICE_ID: z.string(),
+    STRIPE_WEBHOOK: z.string(),
   },
   client: {
     NEXT_PUBLIC_STRIPE_PUBLIC_KEY: z.string(),
@@ -25,5 +26,6 @@ export const env = createEnv({
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
     NEXT_PUBLIC_STRIPE_PUBLIC_KEY: process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY,
     STRIPE_PRICE_ID: process.env.STRIPE_PRICE_ID,
+    STRIPE_WEBHOOK: process.env.STRIPE_WEBHOOK,
   },
 })

@@ -13,6 +13,7 @@ import { AspectRatio } from './ui/aspect-ratio'
 import { useState } from 'react'
 import { Button } from './ui/button'
 import { Input } from './ui/input'
+import { Loader2 } from 'lucide-react'
 
 export type DeliveryOption = 'email' | 'home'
 
@@ -31,6 +32,7 @@ export function PreviewDialog({
   onSubmit,
 }: PreviewDialogProps) {
   const [step, setStep] = useState(1)
+  const [isLoading, setIsLoading] = useState(false)
 
   const [deliveryOption, setDeliveryOption] = useState<DeliveryOption>('email')
 
@@ -45,7 +47,12 @@ export function PreviewDialog({
   }
 
   return (
-    <Dialog open onOpenChange={handleClose}>
+    <Dialog
+      open
+      onOpenChange={() => {
+        if (isLoading) return
+        handleClose()
+      }}>
       <DialogContent className="max-w-[638px]">
         <DialogHeader>
           <DialogTitle>See the sticker preview</DialogTitle>
@@ -79,21 +86,29 @@ export function PreviewDialog({
         ) : (
           <form
             onSubmit={async (e) => {
-              e.preventDefault()
+              try {
+                e.preventDefault()
+                setIsLoading(true)
 
-              const data = new FormData(e.currentTarget)
+                const data = new FormData(e.currentTarget)
 
-              const email = data.get('email')
+                const email = data.get('email')
 
-              if (!email) {
-                // TODO: Messagem de error
-                return
+                if (!email) {
+                  // TODO: Messagem de error
+                  return
+                }
+
+                await onSubmit({
+                  delivery: deliveryOption,
+                  email: email.toString(),
+                })
+              } catch (error) {
+                console.log(error)
+                // TODO: Mensagem de error
+              } finally {
+                setIsLoading(false)
               }
-
-              await onSubmit({
-                delivery: deliveryOption,
-                email: email.toString(),
-              })
             }}
             className="space-y-4 mt-6">
             <div className="space-y-2">
@@ -133,7 +148,12 @@ export function PreviewDialog({
               </p>
             </div>
             <DialogFooter>
-              <Button type="submit" size={'lg'} className="mt-2">
+              <Button
+                disabled={isLoading}
+                type="submit"
+                size={'lg'}
+                className="mt-2">
+                {isLoading && <Loader2 className="size-4 animate-spin mr-2" />}
                 Proceed to Checkout
               </Button>
             </DialogFooter>

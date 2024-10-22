@@ -1,9 +1,10 @@
+import { updatePayment } from '@/actions/update-payment'
+import { env } from '@/env'
 import stripe from '@/lib/stripe'
 import { headers } from 'next/headers'
 import { NextResponse } from 'next/server'
 
-const secret =
-  'whsec_7fb15834731560670d2311d56265039d868e92052a6222d657370e249273e227'
+const secret = env.STRIPE_WEBHOOK
 
 export async function POST(req: Request) {
   try {
@@ -20,14 +21,15 @@ export async function POST(req: Request) {
 
     switch (event.type) {
       case 'checkout.session.completed':
+        console.log(event)
+
         if (event.data.object.payment_status === 'paid') {
           // pagagamento por cartão com sucesso
           const purchaseId = event.data.object.metadata?.purchaseId
-          const userId = event.data.object.metadata?.userId
 
-          console.log('pagamento por cartão com sucesso', {
-            purchaseId,
-            userId,
+          await updatePayment({
+            purchaseId: Number(purchaseId),
+            status: event.data.object.payment_status,
           })
         }
 
@@ -36,11 +38,10 @@ export async function POST(req: Request) {
       case 'checkout.session.expired':
         if (event.data.object.payment_status === 'unpaid') {
           const purchaseId = event.data.object.metadata?.purchaseId
-          const userId = event.data.object.metadata?.userId
 
-          console.log('checkout expirado', {
-            purchaseId,
-            userId,
+          await updatePayment({
+            purchaseId: Number(purchaseId),
+            status: event.data.object.payment_status,
           })
         }
         break
