@@ -22,6 +22,7 @@
     "@radix-ui/react-slot": "^1.1.0",
     "@stripe/stripe-js": "^4.9.0",
     "@t3-oss/env-nextjs": "^0.11.1",
+    "@types/canvas-confetti": "^1.6.4",
     "@types/fabric": "^5.3.9",
     "canvas-confetti": "^1.9.3",
     "class-variance-authority": "^0.7.0",
