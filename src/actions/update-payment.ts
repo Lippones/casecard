@@ -7,7 +7,7 @@ import { createSafeActionClient } from 'next-safe-action'
 import { z } from 'zod'
 
 const updatePaymentSchema = z.object({
-  purchaseId: z.number(),
+  purchaseId: z.string(),
   status: z.enum(['paid', 'unpaid']),
 })
 

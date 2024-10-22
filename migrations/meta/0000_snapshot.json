@@ -1,5 +1,5 @@
 {
-  "id": "62b8129f-ea94-453c-ac63-17e4d08850f8",
+  "id": "80c624da-58c5-4505-8f39-3ee092074e99",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -10,8 +10,20 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "uuid",
           "primaryKey": true,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "access_key": {
+          "name": "access_key",
+          "type": "text",
+          "primaryKey": false,
           "notNull": true
         },
         "image_url": {
@@ -32,18 +44,40 @@
           "primaryKey": false,
           "notNull": true
         },
-        "emailSent": {
-          "name": "emailSent",
+        "email_sent": {
+          "name": "email_sent",
           "type": "boolean",
           "primaryKey": false,
           "notNull": false,
           "default": false
+        },
+        "payment_status": {
+          "name": "payment_status",
+          "type": "payment_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "delivery_method": {
+          "name": "delivery_method",
+          "type": "delivery_method",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
+      "uniqueConstraints": {
+        "purchases_access_key_unique": {
+          "name": "purchases_access_key_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "access_key"
+          ]
+        }
+      },
       "checkConstraints": {}
     },
     "public.users": {
@@ -52,7 +86,7 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "serial",
+          "type": "uuid",
           "primaryKey": true,
           "notNull": true
         },
@@ -78,7 +112,24 @@
       "checkConstraints": {}
     }
   },
-  "enums": {},
+  "enums": {
+    "public.delivery_method": {
+      "name": "delivery_method",
+      "schema": "public",
+      "values": [
+        "email",
+        "home"
+      ]
+    },
+    "public.payment_status": {
+      "name": "payment_status",
+      "schema": "public",
+      "values": [
+        "paid",
+        "unpaid"
+      ]
+    }
+  },
   "schemas": {},
   "sequences": {},
   "views": {},

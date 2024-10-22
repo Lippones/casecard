@@ -21,14 +21,22 @@ export async function POST(req: Request) {
 
     switch (event.type) {
       case 'checkout.session.completed':
-        console.log(event)
-
         if (event.data.object.payment_status === 'paid') {
           // pagagamento por cartão com sucesso
           const purchaseId = event.data.object.metadata?.purchaseId
 
+          if (!purchaseId) {
+            return NextResponse.json(
+              {
+                message: 'purchaseId not found',
+                ok: false,
+              },
+              { status: 500 },
+            )
+          }
+
           await updatePayment({
-            purchaseId: Number(purchaseId),
+            purchaseId,
             status: event.data.object.payment_status,
           })
         }
@@ -39,8 +47,18 @@ export async function POST(req: Request) {
         if (event.data.object.payment_status === 'unpaid') {
           const purchaseId = event.data.object.metadata?.purchaseId
 
+          if (!purchaseId) {
+            return NextResponse.json(
+              {
+                message: 'purchaseId not found',
+                ok: false,
+              },
+              { status: 500 },
+            )
+          }
+
           await updatePayment({
-            purchaseId: Number(purchaseId),
+            purchaseId,
             status: event.data.object.payment_status,
           })
         }

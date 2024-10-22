@@ -6,7 +6,7 @@ import { headers } from 'next/headers'
 import { z } from 'zod'
 
 const createCheckoutSchema = z.object({
-  purchaseId: z.number(),
+  purchaseId: z.string(),
   email: z.string(),
 })
 
@@ -27,7 +27,7 @@ export const createCheckout = createSafeActionClient()
       mode: 'payment',
       customer_email: email,
       payment_method_types: ['card'],
-      success_url: `${origin}/sucesso`,
+      success_url: `${origin}/suceess/${purchaseId}`,
       cancel_url: `${origin}/`,
       metadata: {
         purchaseId,

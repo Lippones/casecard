@@ -14,6 +14,7 @@ import { useState } from 'react'
 import { Button } from './ui/button'
 import { Input } from './ui/input'
 import { Loader2 } from 'lucide-react'
+import Card from './card'
 
 export type DeliveryOption = 'email' | 'home'
 
@@ -63,19 +64,7 @@ export function PreviewDialog({
         {step === 1 ? (
           <>
             <div>
-              <AspectRatio
-                ratio={1011 / 638} // Proporção exata do cartão de crédito
-                className="pointer-events-none aspect-[1011/638] w-full relative">
-                <Image
-                  fill
-                  src={imageUrl}
-                  onLoad={() => {
-                    URL.revokeObjectURL(imageUrl) // Desativa a URL para evitar downloads
-                  }}
-                  alt="preview"
-                  className="pointer-events-none select-none"
-                />
-              </AspectRatio>
+              <Card imgSrc={imageUrl} revokeUrl />
             </div>
             <DialogFooter>
               <Button onClick={() => setStep(2)} size={'lg'} className="mt-2">

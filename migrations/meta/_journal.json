@@ -5,36 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1729283415742,
-      "tag": "0000_nebulous_crusher_hogan",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1729283574861,
-      "tag": "0001_puzzling_giant_girl",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1729538075001,
-      "tag": "0002_futuristic_starbolt",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1729539165557,
-      "tag": "0004_past_meltdown",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1729603791064,
-      "tag": "0005_heavy_vision",
+      "when": 1729622033179,
+      "tag": "0000_daffy_beyonder",
       "breakpoints": true
     }
   ]
