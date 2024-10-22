@@ -27,7 +27,7 @@ export const createCheckout = createSafeActionClient()
       mode: 'payment',
       customer_email: email,
       payment_method_types: ['card'],
-      success_url: `${origin}/suceess/${purchaseId}`,
+      success_url: `${origin}/success/${purchaseId}`,
       cancel_url: `${origin}/`,
       metadata: {
         purchaseId,
