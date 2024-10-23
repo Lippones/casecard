@@ -3,6 +3,7 @@ import { cn } from '@/lib/utils'
 import { useEffect, useRef, type HTMLAttributes } from 'react'
 import { AspectRatio } from './ui/aspect-ratio'
 import Image from 'next/image'
+import { useDisableContextMenuAndShortcuts } from '@/hooks/use-disable-context-menu-and-shortcuts'
 
 interface CardProps extends HTMLAttributes<HTMLDivElement> {
   imgSrc: string
@@ -11,6 +12,8 @@ interface CardProps extends HTMLAttributes<HTMLDivElement> {
 
 const Card = ({ imgSrc, className, revokeUrl = false }: CardProps) => {
   const imageRef = useRef<HTMLImageElement | null>(null)
+
+  useDisableContextMenuAndShortcuts()
 
   useEffect(() => {
     const imageElement = imageRef.current
@@ -24,8 +27,6 @@ const Card = ({ imgSrc, className, revokeUrl = false }: CardProps) => {
     }
 
     const observer = new MutationObserver(() => {
-      alert('Sai dai bixo')
-
       if (
         imageElement.style.userSelect === 'none' &&
         imageElement.style.pointerEvents === 'none' &&
@@ -35,6 +36,7 @@ const Card = ({ imgSrc, className, revokeUrl = false }: CardProps) => {
       }
 
       restoreStyles()
+      alert('Sai dai bixo')
     })
 
     observer.observe(imageElement, {
