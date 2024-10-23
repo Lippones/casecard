@@ -25,6 +25,11 @@ export default async function Success(props: {
       </Suspense>
       <h1 className="text-primary font-medium text-xl">Thank you!</h1>
       <p className="text-4xl font-semibold">Purchase Completed Successfully!</p>
+      {purchase.deliveryMethod === 'email' && (
+        <p className="text-muted-foreground">
+          The sticker has been sent to your email
+        </p>
+      )}
       <div className="max-w-[700px] w-full">
         <Preview accessKey={purchase.accessKey} />
         <Button size={'lg'} className="mt-6 w-full" asChild>
