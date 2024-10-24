@@ -9,9 +9,8 @@ const secret = env.STRIPE_WEBHOOK
 export async function POST(req: Request) {
   try {
     const body = await req.text()
-    const header = await headers()
 
-    const signature = header.get('stripe-signature')
+    const signature = req.headers.get('stripe-signature')
 
     if (!secret || !signature) {
       throw new Error('Missing secret or signature')
