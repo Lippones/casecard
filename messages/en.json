@@ -1,0 +1,98 @@
+{
+	"home": {
+		"hero": {
+			"title": "Create your own custom card sticker in minutes!",
+			"subtitle": "Customize your sticker easily and affordably in just a few steps.",
+			"community": "See community examples",
+			"action": "Create sticker"
+		},
+		"howToWorks": {
+			"items": {
+				"customizeSticker": "Customize your sticker",
+				"customizeDescription": "Use our customization tool to create unique stickers with your own images and colors.",
+				"chooseDelivery": "Choose your delivery option",
+				"chooseDeliveryDescription": "Receive the sticker at your home or digitally via email, ready for immediate use.",
+				"exploreCommunity": "Explore community creations",
+				"exploreCommunityDescription": "Get inspired by stickers created by other users and discover unique designs.",
+				"makePayment": "Make the payment",
+				"makePaymentDescription": "Complete the payment so we can produce your sticker and send it to you.",
+				"shareCommunity": "Share with the community",
+				"shareCommunityDescription": "Showcase your creations to the community and see what other creators are up to!"
+			},
+			"learnMore": "Learn more",
+			"getStarted": "Get started",
+			"exploreCommunity": "Explore community creations"
+		},
+		"faq": {
+			"title": "Frequently asked questions",
+			"item1": {
+				"question": "What is Casecard?",
+				"answer": "Casecard allows you to customize your credit card cover with unique designs. You can create a custom sticker and choose to have it delivered to your home, or receive the digital file via email to print and apply as you wish."
+			},
+			"item2": {
+				"question": "How do I receive my sticker?",
+				"answer": "You can choose to receive your sticker via email as a print-ready file or have the physical sticker delivered to your home."
+			},
+			"item3": {
+				"question": "Are community projects free?",
+				"answer": "No, the projects created by the community are not free. They are for inspiration only."
+			},
+			"item4": {
+				"question": "Can I customize the sticker my way?",
+				"answer": "Yes! You can customize your sticker with exclusive images and colors before finalizing your order."
+			},
+			"item5": {
+				"question": "What about the chip cutout?",
+				"answer": "The sticker will not have a cut for the chip to avoid errors during the application."
+			}
+		}
+	},
+	"editor": {
+		"sidebar": {
+			"title": "Customize",
+			"images": "Images",
+			"add": "Add Image",
+			"organize": "Organize the layers",
+			"options": {
+				"front": "Front",
+				"back": "Back",
+				"90degrees": "90 Degrees",
+				"-90degrees": "-90 Degrees",
+				"remove": "Remove",
+				"save": "Save configuration"
+			}
+		},
+		"preview": {
+			"title": "See the sticker preview",
+			"description": "Upon confirmation you will be directed to checkout",
+			"step1": {
+				"continue": "Continue"
+			},
+			"step2": {
+				"title": "Delivery Method",
+				"options": {
+					"email": "Receive via Email",
+					"home": "Delivered to Your Home"
+				},
+				"email": {
+					"description": "The email we will send the sticker to"
+				},
+				"continue": "Proceed to Checkout"
+			}
+		}
+	},
+	"footer": {
+		"description": "Casecard is a platform that allows you to customize credit card covers in an easy and affordable way.",
+		"legal": "Legal",
+		"termsOfService": "Terms of Use",
+		"privacyPolicy": "Privacy Policy",
+		"developedBy": "Developed by",
+		"copyright": "© 2021 Casecard. All rights reserved.",
+		"followMe": "Follow me"
+	},
+	"errors": {
+		"deliveryQuota": "Unfortunately, we have exhausted our quota for home delivery. Please proceed with email delivery for your order.",
+		"notFound": "it was not possible to find {item}",
+		"unexpected": "An unexpected error occurred. Please try again later. {complement}"
+	}
+}

@@ -4,64 +4,44 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
+import { getTranslations } from 'next-intl/server'
 
-export function FAQSection() {
+export async function FAQSection() {
+  const t = await getTranslations('home.faq')
+
   return (
     <div className="max-w-screen-lg px-4 md:px-8 mx-auto flex flex-col w-full items-center gap-10">
-      <h2 className="text-4xl font-bold">Perguntas Frequentes</h2>
+      <h2 className="text-4xl font-bold">{t('title')}</h2>
       <Accordion className="w-full" type="single" collapsible>
-        <AccordionItem value="item-1">
+        <AccordionItem value="item1">
           <AccordionTrigger className="text-left">
-            O que é Casecard?
+            {t('item1.question')}
           </AccordionTrigger>
-          <AccordionContent>
-            O Casecard permite que você personalize a capa do seu cartão de
-            crédito com designs únicos. Você pode criar um adesivo exclusivo e
-            optar por recebê-lo em casa, ou receber o arquivo digital por email,
-            para imprimir e aplicar como quiser.
-          </AccordionContent>
+          <AccordionContent>{t('item1.answer')}</AccordionContent>
         </AccordionItem>
-        <AccordionItem value="item-1">
+        <AccordionItem value="item2">
           <AccordionTrigger className="text-left">
-            Como recebo meu adesivo?
+            {t('item2.question')}
           </AccordionTrigger>
-          <AccordionContent>
-            Você pode optar por receber seu adesivo no email como um arquivo
-            pronto para impressão ou ter o adesivo físico entregue na sua casa.
-          </AccordionContent>
+          <AccordionContent>{t('item2.answer')}</AccordionContent>
         </AccordionItem>
-
-        <AccordionItem value="item-2">
+        <AccordionItem value="item3">
           <AccordionTrigger className="text-left">
-            Os projetos da comunidade são gratuitos?
+            {t('item3.question')}
           </AccordionTrigger>
-          <AccordionContent>
-            Não, os projetos criados pela comunidade não são gratuitos. Cada
-            criador define o preço dos seus adesivos e você pode escolher
-            comprá-los.
-          </AccordionContent>
+          <AccordionContent>{t('item3.answer')}</AccordionContent>
         </AccordionItem>
-
-        <AccordionItem value="item-3">
+        <AccordionItem value="item4">
           <AccordionTrigger className="text-left">
-            Posso personalizar o adesivo do meu jeito?
+            {t('item4.question')}
           </AccordionTrigger>
-          <AccordionContent>
-            Sim! Você pode personalizar seu adesivo com imagens, textos e cores
-            exclusivas antes de finalizar o pedido.
-          </AccordionContent>
+          <AccordionContent>{t('item4.answer')}</AccordionContent>
         </AccordionItem>
-
-        <AccordionItem value="item-4">
+        <AccordionItem value="item5">
           <AccordionTrigger className="text-left">
-            E sobre o corte para o chip?
+            {t('item5.question')}
           </AccordionTrigger>
-          <AccordionContent>
-            O adesivo não terá um corte no chip, isso é para evitar erros na
-            aplicação do adesivo.
-            {/* O adesivo terá um corte especial para o chip do celular, para garantir
-          que ele funcione perfeitamente após a aplicação. */}
-          </AccordionContent>
+          <AccordionContent>{t('item5.answer')}</AccordionContent>
         </AccordionItem>
       </Accordion>
     </div>

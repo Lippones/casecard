@@ -15,6 +15,8 @@ import { Button } from './ui/button'
 import { Input } from './ui/input'
 import { Loader2 } from 'lucide-react'
 import Card from './card'
+import { useTranslations } from 'next-intl'
+import { useToast } from '@/hooks/use-toast'
 
 export type DeliveryOption = 'email' | 'home'
 
@@ -37,12 +39,15 @@ export function PreviewDialog({
 
   const [deliveryOption, setDeliveryOption] = useState<DeliveryOption>('email')
 
+  const t = useTranslations('editor.preview')
+  const errors = useTranslations('errors')
+
+  const { toast } = useToast()
+
   const [message, setMessage] = useState<string | null>('')
 
   function handleMessage() {
-    setMessage(
-      'Unfortunately, we have exhausted our quota for home delivery. Please proceed with email delivery for your order.',
-    )
+    setMessage(errors('deliveryQuota'))
 
     // Salvar evento
   }
@@ -56,10 +61,8 @@ export function PreviewDialog({
       }}>
       <DialogContent className="max-w-[638px]">
         <DialogHeader>
-          <DialogTitle>See the sticker preview</DialogTitle>
-          <DialogDescription>
-            Upon confirmation you will be directed to checkout
-          </DialogDescription>
+          <DialogTitle>{t('title')}</DialogTitle>
+          <DialogDescription>{t('description')}</DialogDescription>
         </DialogHeader>
         {step === 1 ? (
           <>
@@ -68,7 +71,7 @@ export function PreviewDialog({
             </div>
             <DialogFooter>
               <Button onClick={() => setStep(2)} size={'lg'} className="mt-2">
-                Continuar
+                {t('step1.continue')}
               </Button>
             </DialogFooter>
           </>
@@ -84,7 +87,11 @@ export function PreviewDialog({
                 const email = data.get('email')
 
                 if (!email) {
-                  // TODO: Messagem de error
+                  toast({
+                    title: errors('notFound', {
+                      item: 'Email',
+                    }),
+                  })
                   return
                 }
 
@@ -93,8 +100,9 @@ export function PreviewDialog({
                   email: email.toString(),
                 })
               } catch (error) {
-                console.log(error)
-                // TODO: Mensagem de error
+                toast({
+                  title: errors('unexpected'),
+                })
               } finally {
                 setIsLoading(false)
               }
@@ -102,7 +110,7 @@ export function PreviewDialog({
             className="space-y-4 mt-6">
             <div className="space-y-2">
               <label className="text-sm font-medium" htmlFor="choose">
-                Delivery Method
+                {t('step2.title')}
               </label>
               <div className="flex items-center gap-2">
                 <Button
@@ -110,14 +118,14 @@ export function PreviewDialog({
                   type="button"
                   variant={deliveryOption === 'email' ? 'default' : 'outline'}
                   size={'sm'}>
-                  Receive via Email
+                  {t('step2.options.email')}
                 </Button>
                 <Button
                   onClick={handleMessage}
                   type="button"
                   variant={deliveryOption === 'home' ? 'default' : 'outline'}
                   size={'sm'}>
-                  Delivered to Your Home
+                  {t('step2.options.home')}
                 </Button>
               </div>
             </div>
@@ -133,7 +141,7 @@ export function PreviewDialog({
                 placeholder="jonhdoe@gmail.com"
               />
               <p className="text-xs text-muted-foreground">
-                The email we will send the sticker to
+                {t('step2.email.description')}
               </p>
             </div>
             <DialogFooter>
@@ -143,7 +151,7 @@ export function PreviewDialog({
                 size={'lg'}
                 className="mt-2">
                 {isLoading && <Loader2 className="size-4 animate-spin mr-2" />}
-                Proceed to Checkout
+                {t('step2.continue')}
               </Button>
             </DialogFooter>
           </form>

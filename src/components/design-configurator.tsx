@@ -23,11 +23,18 @@ import { uploadFile } from '@/actions/upload-file'
 import { loadStripe } from '@stripe/stripe-js'
 import { env } from '@/env'
 import { createCheckout } from '@/actions/create-checkout'
+import { useToast } from '@/hooks/use-toast'
+import { useTranslations } from 'next-intl'
 
 export function DesignConfigurador() {
   const uploadImageButton = useRef<HTMLInputElement>(null)
   const cardRef = useRef<HTMLDivElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
+
+  const { toast } = useToast()
+
+  const t = useTranslations('editor.sidebar')
+  const erros = useTranslations('errors')
 
   const [previewFile, setPreviewFile] = useState<File | null>(null)
 
@@ -137,7 +144,9 @@ export function DesignConfigurador() {
       const ctx = canvas.getContext('2d')
 
       if (!ctx) {
-        // TODO: messagem de error
+        toast({
+          title: erros('unexpected'),
+        })
         return
       }
 
@@ -176,7 +185,9 @@ export function DesignConfigurador() {
       const upscaleCtx = upscaleCanvas.getContext('2d')
 
       if (!upscaleCtx) {
-        // TODO: messagem de error
+        toast({
+          title: erros('unexpected'),
+        })
         return
       }
 
@@ -230,8 +241,9 @@ export function DesignConfigurador() {
 
       setPreviewFile(file)
     } catch (error) {
-      console.error(error)
-      //TODO: Messagem de error
+      toast({
+        title: erros('unexpected'),
+      })
     }
   }
 
@@ -279,7 +291,9 @@ export function DesignConfigurador() {
   }) {
     try {
       if (!previewFile) {
-        // TODO: Messagem de error
+        toast({
+          title: erros('unexpected'),
+        })
         return
       }
 
@@ -319,7 +333,7 @@ export function DesignConfigurador() {
   }
 
   return (
-    <div className="relative md:grid grid-cols-3 h-full">
+    <div className="relative md:grid grid-cols-[1fr_1fr_400px] lg:grid-cols-[1fr_1fr_600px] h-full">
       <div
         ref={containerRef}
         className="relative h-full m-auto overflow-hidden col-span-2 w-full flex items-center justify-center text-center">
@@ -391,19 +405,19 @@ export function DesignConfigurador() {
 
       <div className="h-full flex flex-col bg-card border-l">
         <ScrollArea className="relative flex-1 overflow-auto">
-          <div className="px-8 pb-12 pt-8">
-            <h2 className="text-3xl tracking-tight font-bold">Customize</h2>
+          <div className="md:px-8 px-4 pb-12 pt-8 w-full">
+            <h2 className="text-3xl tracking-tight font-bold">{t('title')}</h2>
 
             <Separator className="w-full my-6" />
 
             <div className="relative mt-4 h-full flex flex-col gap-4">
-              <div className="space-y-2 flex flex-col">
+              <div className="space-y-2 flex flex-col w-full">
                 <div className="flex justify-between items-center">
-                  <span className="font-medium">Imagens</span>
+                  <span className="font-medium">{t('images')}</span>
                   <Button asChild variant={'outline'}>
                     <label htmlFor="add" className="cursor-pointer">
                       <Plus className="size-5 mr-2" />
-                      Add Image
+                      {t('add')}
                       <input
                         id="add"
                         ref={uploadImageButton}
@@ -419,7 +433,7 @@ export function DesignConfigurador() {
                   </Button>
                 </div>
                 <span className="text-sm text-muted-foreground">
-                  Organize as camadas
+                  {t('organize')}
                 </span>
                 <ul className="space-y-4">
                   {selectedImages
@@ -429,54 +443,56 @@ export function DesignConfigurador() {
                     .map(({ url }) => (
                       <li
                         key={url}
-                        className="flex items-center justify-between space-x-2 h-36 gap-6 relative">
+                        className="flex max-lg:flex-col lg:items-center lg:justify-between lg:space-x-2 lg:h-36 gap-4 max-lg:py-4 max-lg:border-t max-lg:border-b lg:gap-6 relative">
                         <NextImage
                           src={url}
                           alt="NextImage"
                           width={200}
                           height={144}
-                          className="rounded-md object-cover h-[136px] w-[200px]"
+                          className="rounded-md object-cover h-[136px] w-full lg:w-[200px]"
                         />
                         <Separator orientation="vertical" />
-                        <div className="ml-auto grid grid-cols-2 justify-between gap-2">
+                        <div className="lg:ml-auto grid grid-cols-2 justify-between gap-2">
                           <Button
                             variant={'outline'}
                             onClick={() => handleMove(url, 1)}
                             className="w-full">
-                            <ArrowUpFromLine className="size-5 mr-2" /> Para
-                            frente
+                            <ArrowUpFromLine className="size-5 mr-2" />
+                            {t('options.front')}
                           </Button>
                           <Button
                             className="w-full"
                             variant={'outline'}
                             onClick={() => handleMove(url, -1)}>
-                            <ArrowDownFromLine className="size-5 mr-2" /> Para
-                            trás
+                            <ArrowDownFromLine className="size-5 mr-2" />{' '}
+                            {t('options.back')}
                           </Button>
                           <Button
                             className="w-full"
                             variant={'outline'}
                             onClick={() => handleRotate(url, 90)}>
-                            <RotateCw className="size-5 mr-2" /> 90 graus
+                            <RotateCw className="size-5 mr-2" />{' '}
+                            {t('options.90degrees')}
                           </Button>
                           <Button
                             className="w-full"
                             variant={'outline'}
                             onClick={() => handleRotate(url, -90)}>
-                            <RotateCcw className="size-5 mr-2" /> -90 graus
+                            <RotateCcw className="size-5 mr-2" />{' '}
+                            {t('options.-90degrees')}
                           </Button>
                           <Button
                             className="col-span-2 w-full"
                             variant={'destructive'}
                             onClick={() => handleRemove(url)}>
-                            remover
+                            {t('options.remove')}
                           </Button>
                         </div>
                       </li>
                     ))}
                 </ul>
               </div>
-              <Button onClick={saveConfiguration}>Salvar</Button>
+              <Button onClick={saveConfiguration}>{t('options.save')}</Button>
             </div>
           </div>
         </ScrollArea>

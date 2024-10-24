@@ -2,9 +2,11 @@ import Link from 'next/link'
 import { Button } from '../ui/button'
 import { OrbitingBackground } from './orbiting-background'
 import { CardMockup } from './card-mockup'
-import { Suspense } from 'react'
+import { getTranslations } from 'next-intl/server'
 
-export function Hero() {
+export async function Hero() {
+  const t = await getTranslations('home.hero')
+
   return (
     <div className="relative h-svh w-full pt-24 md:pt-32">
       <div className="absolute inset-0">
@@ -13,21 +15,20 @@ export function Hero() {
 
       <div className="relative z-20 flex items-center gap-6 flex-col px-2 md:px-8">
         <h1 className="text-center text-3xl md:text-6xl font-semibold leading-tight md:max-w-[1200px]">
-          Crie seu próprio adesivo de cartão personalizado em minutos!
+          {t('title')}
         </h1>
         <p className="text-center text-lg md:text-2xl font-medium text-muted-foreground">
-          Personalize o seu adesivo de forma rápida e prática. Barato, simples e
-          entregue em sua casa!
+          {t('subtitle')}
         </p>
         <div className="flex max-md:flex-col-reverse gap-4 md:gap-8 items-center">
           <Button
             asChild
             variant={'link'}
             className="text-base text-muted-foreground py-6">
-            <Link href="/comunidade">Ver exemplos da comunidade</Link>
+            <Link href="/comunidade">{t('community')}</Link>
           </Button>
           <Button asChild className="h-auto font-bold text-base px-8 py-4">
-            <Link href="/editor">Criar adesivo</Link>
+            <Link href="/editor">{t('action')}</Link>
           </Button>
         </div>
       </div>
