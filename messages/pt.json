@@ -1,0 +1,107 @@
+{
+	"home": {
+		"hero": {
+			"title": "Crie seu próprio adesivo personalizado para cartão em minutos!",
+			"subtitle": "Personalize seu adesivo de forma fácil e acessível em apenas alguns passos.",
+			"community": "Veja exemplos da comunidade",
+			"action": "Criar adesivo"
+		},
+		"howToWorks": {
+			"items": {
+				"customizeSticker": "Personalize seu adesivo",
+				"customizeDescription": "Use nossa ferramenta de personalização para criar adesivos únicos com suas próprias imagens e cores.",
+				"chooseDelivery": "Escolha a opção de entrega",
+				"chooseDeliveryDescription": "Receba o adesivo em sua casa ou digitalmente por e-mail, pronto para uso imediato.",
+				"exploreCommunity": "Explore criações da comunidade",
+				"exploreCommunityDescription": "Inspire-se com adesivos criados por outros usuários e descubra designs únicos.",
+				"makePayment": "Realize o pagamento",
+				"makePaymentDescription": "Complete o pagamento para que possamos produzir seu adesivo e enviá-lo para você.",
+				"shareCommunity": "Compartilhe com a comunidade",
+				"shareCommunityDescription": "Mostre suas criações para a comunidade e veja o que outros criadores estão fazendo!"
+			},
+			"learnMore": "Saiba mais",
+			"getStarted": "Começar",
+			"exploreCommunity": "Explore criações da comunidade"
+		},
+		"faq": {
+			"title": "Perguntas frequentes",
+			"item1": {
+				"question": "O que é Casecard?",
+				"answer": "O Casecard permite que você personalize a capa do seu cartão de crédito com designs únicos. Você pode criar um adesivo personalizado e escolher recebê-lo em casa ou receber o arquivo digital por e-mail para imprimir e aplicar como preferir."
+			},
+			"item2": {
+				"question": "Como recebo meu adesivo?",
+				"answer": "Você pode escolher receber seu adesivo por e-mail como um arquivo pronto para impressão ou ter o adesivo físico entregue em sua casa."
+			},
+			"item3": {
+				"question": "Os projetos da comunidade são gratuitos?",
+				"answer": "Não, os projetos criados pela comunidade não são gratuitos. Eles servem apenas como inspiração."
+			},
+			"item4": {
+				"question": "Posso personalizar o adesivo do meu jeito?",
+				"answer": "Sim! Você pode personalizar seu adesivo com imagens e cores exclusivas antes de finalizar o pedido."
+			},
+			"item5": {
+				"question": "E quanto ao recorte do chip?",
+				"answer": "O adesivo não terá um recorte para o chip para evitar erros durante a aplicação."
+			}
+		}
+	},
+	"editor": {
+		"sidebar": {
+			"title": "Personalizar",
+			"images": "Imagens",
+			"add": "Adicionar Imagem",
+			"organize": "Organizar as camadas",
+			"options": {
+				"front": "Frente",
+				"back": "Verso",
+				"90degrees": "90 Graus",
+				"-90degrees": "-90 Graus",
+				"remove": "Remover",
+				"save": "Salvar configuração"
+			}
+		},
+		"preview": {
+			"title": "Veja a prévia do adesivo",
+			"description": "Após a confirmação, você será direcionado para o pagamento",
+			"step1": {
+				"continue": "Continuar"
+			},
+			"step2": {
+				"title": "Método de Entrega",
+				"options": {
+					"email": "Receber por E-mail",
+					"home": "Entregue em Sua Casa"
+				},
+				"email": {
+					"description": "O e-mail para onde enviaremos o adesivo"
+				},
+				"continue": "Prosseguir para o Pagamento"
+			}
+		}
+	},
+	"success": {
+		"title": "Obrigado!",
+		"description": "Compra Concluída com Sucesso!",
+		"message": {
+			"email": "O adesivo foi enviado para o seu e-mail"
+		},
+		"backButton": "Voltar ao site",
+		"error": "Não foi possível encontrar sua compra"
+	},
+	"footer": {
+		"description": "O Casecard é uma plataforma que permite personalizar capas de cartão de crédito de forma fácil e acessível.",
+		"legal": "Legal",
+		"termsOfService": "Termos de Uso",
+		"privacyPolicy": "Política de Privacidade",
+		"developedBy": "Desenvolvido por",
+		"copyright": "© 2021 Casecard. Todos os direitos reservados.",
+		"followMe": "Siga-me"
+	},
+	"errors": {
+		"deliveryQuota": "Infelizmente, esgotamos nossa cota para entregas em domicílio. Por favor, prossiga com a entrega por e-mail para o seu pedido.",
+		"notFound": "não foi possível encontrar {item}",
+		"unexpected": "Ocorreu um erro inesperado. Por favor, tente novamente mais tarde. {complement}"
+	}
+}
