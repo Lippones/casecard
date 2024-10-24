@@ -81,6 +81,15 @@
 			}
 		}
 	},
+	"success": {
+		"title": "Thank you!",
+		"description": "Purchase Completed Successfully!",
+		"message": {
+			"email": "The sticker has been sent to your email"
+		},
+		"backButton": "Back to site",
+		"error": "Unable to find your purchase"
+	},
 	"footer": {
 		"description": "Casecard is a platform that allows you to customize credit card covers in an easy and affordable way.",
 		"legal": "Legal",
