@@ -5,16 +5,7 @@ import { AspectRatio } from './ui/aspect-ratio'
 import { useRef, useState } from 'react'
 import { Rnd } from 'react-rnd'
 import { HandleComponent } from './handle-component'
-import { ScrollArea } from './ui/scroll-area'
-import {
-  ArrowDownFromLine,
-  ArrowUpFromLine,
-  Plus,
-  RotateCcw,
-  RotateCw,
-} from 'lucide-react'
 import { Button } from './ui/button'
-import { Separator } from './ui/separator'
 
 import { type DeliveryOption, PreviewDialog } from './preview-dialog'
 import { finishCustomization } from '@/actions/finish-customization'
@@ -25,34 +16,49 @@ import { env } from '@/env'
 import { createCheckout } from '@/actions/create-checkout'
 import { useToast } from '@/hooks/use-toast'
 import { useTranslations } from 'next-intl'
+import useMediaQuery from '@/hooks/use-media-query'
+import { SideBarConfigurator } from './sidebar-configurator'
+
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from '@/components/ui/drawer'
+import { ArrowUp } from 'lucide-react'
+
+export type EditorImage = {
+  index: number
+  degrees: number
+  url: string
+  renderedPosition: {
+    x: number
+    y: number
+  }
+  renderedDimension: {
+    width: number
+    height: number
+  }
+}
 
 export function DesignConfigurador() {
   const uploadImageButton = useRef<HTMLInputElement>(null)
   const cardRef = useRef<HTMLDivElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
 
+  const isSmallScreen = useMediaQuery('(max-width: 768px)')
+
   const { toast } = useToast()
 
-  const t = useTranslations('editor.sidebar')
   const erros = useTranslations('errors')
 
   const [previewFile, setPreviewFile] = useState<File | null>(null)
 
-  const [selectedImages, setSelectedImages] = useState<
-    {
-      index: number
-      degrees: number
-      url: string
-      renderedPosition: {
-        x: number
-        y: number
-      }
-      renderedDimension: {
-        width: number
-        height: number
-      }
-    }[]
-  >([])
+  const [selectedImages, setSelectedImages] = useState<EditorImage[]>([])
 
   function handleAddImage(file: File) {
     const url = URL.createObjectURL(file)
@@ -63,12 +69,14 @@ export function DesignConfigurador() {
         index: selectedImages.length,
         degrees: 0,
         renderedDimension: {
-          width: 420,
-          height: 420,
+          width: isSmallScreen ? 300 : 420,
+          height: isSmallScreen ? 300 : 420,
         },
         renderedPosition: {
           x: containerRef.current!.offsetWidth / 2 - 150,
-          y: containerRef.current!.offsetHeight / 2 - 150,
+          y: isSmallScreen
+            ? containerRef.current!.offsetHeight / 2 - 320
+            : containerRef.current!.offsetHeight / 2 - 150,
         },
       },
     ])
@@ -337,7 +345,7 @@ export function DesignConfigurador() {
       <div
         ref={containerRef}
         className="relative h-full m-auto overflow-hidden col-span-2 w-full flex items-center justify-center text-center">
-        <div className="relative w-[400px] bg-opacity-50 pointer-events-none aspect-[1011/638]">
+        <div className="relative w-[400px] bg-opacity-50 pointer-events-none aspect-[1011/638] max-md:bottom-40 max-md:px-4">
           <AspectRatio
             ref={cardRef}
             ratio={1011 / 638} // Proporção exata do cartão de crédito
@@ -350,7 +358,7 @@ export function DesignConfigurador() {
             />
           </AspectRatio>
 
-          <div className="absolute z-40 inset-0 left-[3px] top-px right-[3px] bottom-px shadow-[0_0_0_99999px_rgba(23,23,23,0.4)]" />
+          <div className="absolute z-40 inset-0 left-[3px] top-px right-[3px] bottom-px shadow-[0_0_0_99999px_rgba(23,23,23,0.4)] " />
         </div>
 
         {selectedImages.map(
@@ -403,100 +411,40 @@ export function DesignConfigurador() {
         )}
       </div>
 
-      <div className="h-full flex flex-col bg-card border-l">
-        <ScrollArea className="relative flex-1 overflow-auto">
-          <div className="md:px-8 px-4 pb-12 pt-8 w-full">
-            <h2 className="text-3xl tracking-tight font-bold">{t('title')}</h2>
-
-            <Separator className="w-full my-6" />
-
-            <div className="relative mt-4 h-full flex flex-col gap-4">
-              <div className="space-y-2 flex flex-col w-full">
-                <div className="flex justify-between items-center">
-                  <span className="font-medium">{t('images')}</span>
-                  <Button asChild variant={'outline'}>
-                    <label htmlFor="add" className="cursor-pointer">
-                      <Plus className="size-5 mr-2" />
-                      {t('add')}
-                      <input
-                        id="add"
-                        ref={uploadImageButton}
-                        type="file"
-                        onChange={(e) => {
-                          const file = e.target.files?.[0]
-                          if (file) handleAddImage(file)
-                        }}
-                        accept="image/*"
-                        className="hidden"
-                      />
-                    </label>
-                  </Button>
-                </div>
-                <span className="text-sm text-muted-foreground">
-                  {t('organize')}
-                </span>
-                <ul className="space-y-4">
-                  {selectedImages
-                    .sort((a, b) => {
-                      return b.index - a.index
-                    })
-                    .map(({ url }) => (
-                      <li
-                        key={url}
-                        className="flex max-lg:flex-col lg:items-center lg:justify-between lg:space-x-2 lg:h-36 gap-4 max-lg:py-4 max-lg:border-t max-lg:border-b lg:gap-6 relative">
-                        <NextImage
-                          src={url}
-                          alt="NextImage"
-                          width={200}
-                          height={144}
-                          className="rounded-md object-cover h-[136px] w-full lg:w-[200px]"
-                        />
-                        <Separator orientation="vertical" />
-                        <div className="lg:ml-auto grid grid-cols-2 justify-between gap-2">
-                          <Button
-                            variant={'outline'}
-                            onClick={() => handleMove(url, 1)}
-                            className="w-full">
-                            <ArrowUpFromLine className="size-5 mr-2" />
-                            {t('options.front')}
-                          </Button>
-                          <Button
-                            className="w-full"
-                            variant={'outline'}
-                            onClick={() => handleMove(url, -1)}>
-                            <ArrowDownFromLine className="size-5 mr-2" />{' '}
-                            {t('options.back')}
-                          </Button>
-                          <Button
-                            className="w-full"
-                            variant={'outline'}
-                            onClick={() => handleRotate(url, 90)}>
-                            <RotateCw className="size-5 mr-2" />{' '}
-                            {t('options.90degrees')}
-                          </Button>
-                          <Button
-                            className="w-full"
-                            variant={'outline'}
-                            onClick={() => handleRotate(url, -90)}>
-                            <RotateCcw className="size-5 mr-2" />{' '}
-                            {t('options.-90degrees')}
-                          </Button>
-                          <Button
-                            className="col-span-2 w-full"
-                            variant={'destructive'}
-                            onClick={() => handleRemove(url)}>
-                            {t('options.remove')}
-                          </Button>
-                        </div>
-                      </li>
-                    ))}
-                </ul>
-              </div>
-              <Button onClick={saveConfiguration}>{t('options.save')}</Button>
-            </div>
-          </div>
-        </ScrollArea>
-      </div>
+      {isSmallScreen ? (
+        <Drawer defaultOpen>
+          <DrawerTrigger asChild>
+            <Button
+              size={'lg'}
+              className="absolute bottom-10 left-1/2 right-1/2 -translate-x-1/2 mx-auto z-40 w-[300px]">
+              <ArrowUp className="size-4 mr-2" /> Open customizador
+            </Button>
+          </DrawerTrigger>
+          <DrawerContent className="bg-card">
+            <SideBarConfigurator
+              handleAddImage={handleAddImage}
+              handleMove={handleMove}
+              handleRemove={handleRemove}
+              handleRotate={handleRotate}
+              saveConfiguration={saveConfiguration}
+              selectedImages={selectedImages}
+              uploadImageButton={uploadImageButton}
+            />
+          </DrawerContent>
+        </Drawer>
+      ) : (
+        <div className="h-full flex flex-col bg-card border-l">
+          <SideBarConfigurator
+            handleAddImage={handleAddImage}
+            handleMove={handleMove}
+            handleRemove={handleRemove}
+            handleRotate={handleRotate}
+            saveConfiguration={saveConfiguration}
+            selectedImages={selectedImages}
+            uploadImageButton={uploadImageButton}
+          />
+        </div>
+      )}
 
       {previewFile && (
         <PreviewDialog
