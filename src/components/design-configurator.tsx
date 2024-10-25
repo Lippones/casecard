@@ -30,6 +30,7 @@ import {
   DrawerTrigger,
 } from '@/components/ui/drawer'
 import { ArrowUp } from 'lucide-react'
+import posthog from 'posthog-js'
 
 export type EditorImage = {
   index: number
@@ -80,6 +81,8 @@ export function DesignConfigurador() {
         },
       },
     ])
+
+    posthog.capture('Added an image')
 
     if (uploadImageButton.current) {
       uploadImageButton.current.value = ''
@@ -247,6 +250,8 @@ export function DesignConfigurador() {
       const blob = base64ToBlob(base64Data, 'image/png')
       const file = new File([blob], 'filename.png', { type: 'image/png' })
 
+      posthog.capture('Open preview')
+
       setPreviewFile(file)
     } catch (error) {
       toast({
@@ -334,9 +339,14 @@ export function DesignConfigurador() {
       }
 
       const { id } = session.data
+
+      posthog.capture('checkout')
+
       await stripeClient.redirectToCheckout({ sessionId: id })
     } catch (error) {
-      console.log(error)
+      toast({
+        title: erros('unexpected'),
+      })
     }
   }
 

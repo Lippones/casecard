@@ -2,6 +2,7 @@ import { type AbstractIntlMessages, NextIntlClientProvider } from 'next-intl'
 import type { ReactNode } from 'react'
 import { ThemeProvider } from './theme-provider'
 import { Toaster } from './ui/toaster'
+import { CSPostHogProvider } from './cs-post-hog-provider'
 
 interface ProvidersProps {
   children: ReactNode
@@ -16,7 +17,7 @@ export function Providers({ children, messages }: ProvidersProps) {
         defaultTheme="dark"
         forcedTheme="dark"
         disableTransitionOnChange>
-        {children}
+        <CSPostHogProvider>{children}</CSPostHogProvider>
         <Toaster />
       </ThemeProvider>
     </NextIntlClientProvider>
