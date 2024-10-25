@@ -17,6 +17,7 @@ import { Loader2 } from 'lucide-react'
 import Card from './card'
 import { useTranslations } from 'next-intl'
 import { useToast } from '@/hooks/use-toast'
+import posthog from 'posthog-js'
 
 export type DeliveryOption = 'email' | 'home'
 
@@ -49,7 +50,7 @@ export function PreviewDialog({
   function handleMessage() {
     setMessage(errors('deliveryQuota'))
 
-    // Salvar evento
+    posthog.capture('Deliver Method', { property: 'home' })
   }
 
   return (
