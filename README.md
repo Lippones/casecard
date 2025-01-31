@@ -1,36 +1,33 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<h1 align="center">CaseCard</h1>
 
-## Getting Started
+<br>
 
-First, run the development server:
+<div align="center">
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+![Preview](./.github/assets/Cover.png)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+</div>
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+<hr>
+<br>
+<br>
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 💻 Projeto <a name = "projeto"></a>
 
-## Learn More
+O CaseCard é uma aplicação simples para criar adesivos personalizados para cartões de crédito.
+Os usuários podem adicionar imagens e ajustar o design em tempo real. A imagem final pode ser exportada para impressão como adesivo. 🚀
 
-To learn more about Next.js, take a look at the following resources:
+<br>
+<br>
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🚀 Tecnologias <a name = "tecnologias"></a>
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Next.js** - Framework React full-stack  
+- **Server Actions** - Manipulação de dados no servidor  
+- **PostgreSQL** - Banco de dados relacional  
+- **Drizzle ORM** - ORM para interação com o banco de dados  
+- **Amazon S3** - Armazenamento de imagens
+- **Stripe** - Processar pagamentos  
+- **TypeScript** - Tipagem estática para JavaScript  
+- **React.js** - Biblioteca para criação da interface  
+- **Tailwind CSS** - Estilização rápida com classes utilitárias  
