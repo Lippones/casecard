@@ -1,0 +1,15 @@
+services:
+  database:
+    image: bitnami/postgresql:latest
+    environment:
+      POSTGRES_DB: casecard
+      POSTGRES_USER: casecard
+      POSTGRES_PASSWORD: casecard
+    ports:
+      - 5432:5432
+    volumes:
+      - casecard:/bitnami/postgresql
+
+volumes:
+  casecard:
+    driver: local

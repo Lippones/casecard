@@ -7,9 +7,10 @@ import { useEffect, useState } from 'react'
 
 interface PreviewProps {
   accessKey: string
+  nsfw: boolean
 }
 
-export function Preview({ accessKey }: PreviewProps) {
+export function Preview({ accessKey, nsfw }: PreviewProps) {
   const { execute, isExecuting = true, result } = useAction(getSignedUrl)
 
   const [imageUrl, setImageUrl] = useState<string | null>(null)
@@ -31,6 +32,6 @@ export function Preview({ accessKey }: PreviewProps) {
   }
 
   if (imageUrl) {
-    return <CardPreview imgSrc={imageUrl} />
+    return <CardPreview nsfw={nsfw} imgSrc={imageUrl} revokeUrl />
   }
 }

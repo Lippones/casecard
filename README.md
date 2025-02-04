@@ -27,7 +27,11 @@ Os usuários podem adicionar imagens e ajustar o design em tempo real. A imagem 
 - **PostgreSQL** - Banco de dados relacional  
 - **Drizzle ORM** - ORM para interação com o banco de dados  
 - **Amazon S3** - Armazenamento de imagens
-- **Stripe** - Processar pagamentos  
+- **Stripe** - Processar pagamentos 
+- **next-intl** - Internacionalização para Next.js  
+- **PostHog** - Captura de eventos e análise de dados
+- **NSFWJS** - Verificação de conteúdo NSFW do lado do cliente
+- **Resend** - Envio de Email
 - **TypeScript** - Tipagem estática para JavaScript  
 - **React.js** - Biblioteca para criação da interface  
 - **Tailwind CSS** - Estilização rápida com classes utilitárias  

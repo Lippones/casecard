@@ -1,6 +1,6 @@
 'use server'
 import { db } from '@/db/drizzle'
-import { purchase, user } from '@/db/schema'
+import { artwork, purchase, user } from '@/db/schema'
 import { createSafeActionClient } from 'next-safe-action'
 import { z } from 'zod'
 import { Decimal } from 'decimal.js'
@@ -12,12 +12,16 @@ const finishCustomizationSchema = z.object({
   email: z.string().email(),
   deliveryMethod: z.enum(['email', 'home']),
   accessKey: z.string(),
+  isPublic: z.boolean(),
+  isNSFW: z.boolean(),
 })
 
 export const finishCustomization = createSafeActionClient()
   .schema(finishCustomizationSchema)
   .action(
-    async ({ parsedInput: { email, imageUrl, deliveryMethod, accessKey } }) => {
+    async ({
+      parsedInput: { email, imageUrl, deliveryMethod, accessKey, isPublic },
+    }) => {
       const decimalValue = new Decimal(0)
 
       const userAlreadyExists = await db
@@ -26,21 +30,30 @@ export const finishCustomization = createSafeActionClient()
         .where(eq(user.email, email))
 
       if (userAlreadyExists.length > 0) {
-        const purschase = await db
-          .insert(purchase)
+        const art = await db
+          .insert(artwork)
           .values({
             imageUrl,
-            priceId: env.STRIPE_PRICE_ID,
-            value: decimalValue.toString(),
-            paymentStatus: 'unpaid',
-            deliveryMethod,
+            isPublic,
             accessKey,
             userId: userAlreadyExists[0].id,
           })
           .returning()
 
+        const createdPurchase = await db
+          .insert(purchase)
+          .values({
+            artWorkId: art[0].id,
+            priceId: env.STRIPE_PRICE_ID,
+            value: decimalValue.toString(),
+            paymentStatus: 'unpaid',
+            deliveryMethod,
+            userId: userAlreadyExists[0].id,
+          })
+          .returning()
+
         return {
-          purschase,
+          purchase: createdPurchase,
           user: userAlreadyExists[0],
         }
       }
@@ -52,21 +65,30 @@ export const finishCustomization = createSafeActionClient()
         })
         .returning()
 
-      const createdPurchase = await db
-        .insert(purchase)
+      const art = await db
+        .insert(artwork)
         .values({
           imageUrl,
-          priceId: env.STRIPE_PRICE_ID,
-          value: decimalValue.toString(),
-          paymentStatus: 'unpaid',
-          deliveryMethod,
+          isPublic,
           accessKey,
           userId: createdUser[0].id,
         })
         .returning()
 
+      const createdPurchase = await db
+        .insert(purchase)
+        .values({
+          artWorkId: art[0].id,
+          priceId: env.STRIPE_PRICE_ID,
+          value: decimalValue.toString(),
+          paymentStatus: 'unpaid',
+          deliveryMethod,
+          userId: createdUser[0].id,
+        })
+        .returning()
+
       return {
-        purschase: createdPurchase,
+        purchase: createdPurchase,
         user: createdUser[0],
       }
     },

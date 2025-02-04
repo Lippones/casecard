@@ -1,7 +1,7 @@
 'use server'
 
 import { db } from '@/db/drizzle'
-import { purchase, user } from '@/db/schema'
+import { artwork, purchase, user } from '@/db/schema'
 import { eq } from 'drizzle-orm'
 import { createSafeActionClient } from 'next-safe-action'
 import { z } from 'zod'
@@ -34,12 +34,21 @@ export const updatePayment = createSafeActionClient()
       updatedPurchase[0].paymentStatus === 'paid' &&
       updatedPurchase[0].deliveryMethod === 'email'
     ) {
-      const { accessKey, userId } = updatedPurchase[0]
+      const { userId, artWorkId } = updatedPurchase[0]
+
+      const image = await db
+        .select()
+        .from(artwork)
+        .where(eq(artwork.id, artWorkId))
+
+      if (image.length === 0) {
+        throw new Error('Not Found')
+      }
 
       const [findUser, file] = await Promise.all([
         db.select().from(user).where(eq(user.id, userId)),
         getFile({
-          fileName: accessKey,
+          fileName: image[0].accessKey,
         }),
       ])
 

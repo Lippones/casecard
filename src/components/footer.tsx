@@ -59,7 +59,9 @@ export async function Footer() {
               </Avatar>
             </div>
             <span className="text-xs text-muted-foreground">
-              {t('copyright')}
+              {t('copyright', {
+                year: new Date().getFullYear().toString(),
+              })}
             </span>
           </div>
           <div className="flex max-sm:w-full items-center justify-between rounded-full border bg-secondary/40 px-6 py-4 backdrop-blur-md gap-12">

@@ -18,6 +18,7 @@ import Card from './card'
 import { useTranslations } from 'next-intl'
 import { useToast } from '@/hooks/use-toast'
 import posthog from 'posthog-js'
+import { Checkbox } from './ui/checkbox'
 
 export type DeliveryOption = 'email' | 'home'
 
@@ -27,6 +28,7 @@ interface PreviewDialogProps {
   onSubmit: (props: {
     email: string
     delivery: DeliveryOption
+    isPublic: boolean
   }) => Promise<void>
 }
 
@@ -39,6 +41,7 @@ export function PreviewDialog({
   const [isLoading, setIsLoading] = useState(false)
 
   const [deliveryOption, setDeliveryOption] = useState<DeliveryOption>('email')
+  const [isPublic, setIsPublic] = useState<boolean>(true)
 
   const t = useTranslations('editor.preview')
   const errors = useTranslations('errors')
@@ -99,6 +102,7 @@ export function PreviewDialog({
                 await onSubmit({
                   delivery: deliveryOption,
                   email: email.toString(),
+                  isPublic,
                 })
               } catch (error) {
                 toast({
@@ -143,6 +147,21 @@ export function PreviewDialog({
               />
               <p className="text-xs text-muted-foreground">
                 {t('step2.email.description')}
+              </p>
+            </div>
+            <div className="space-y-2">
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  checked={isPublic}
+                  onCheckedChange={(value) => setIsPublic(value === true)}
+                  id="isPublic"
+                />
+                <label htmlFor="isPublic" className="text-sm font-medium">
+                  {t('step2.isPublic.title')}
+                </label>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                {t('step2.isPublic.description')}
               </p>
             </div>
             <DialogFooter>

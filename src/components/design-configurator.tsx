@@ -2,7 +2,7 @@
 
 import NextImage from 'next/image'
 import { AspectRatio } from './ui/aspect-ratio'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Rnd } from 'react-rnd'
 import { HandleComponent } from './handle-component'
 import { Button } from './ui/button'
@@ -19,18 +19,10 @@ import { useTranslations } from 'next-intl'
 import useMediaQuery from '@/hooks/use-media-query'
 import { SideBarConfigurator } from './sidebar-configurator'
 
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from '@/components/ui/drawer'
+import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer'
 import { ArrowUp } from 'lucide-react'
 import posthog from 'posthog-js'
+import type { NSFWJS } from 'nsfwjs'
 
 export type EditorImage = {
   index: number
@@ -50,6 +42,19 @@ export function DesignConfigurador() {
   const uploadImageButton = useRef<HTMLInputElement>(null)
   const cardRef = useRef<HTMLDivElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
+
+  const [model, setModel] = useState<NSFWJS | null>(null)
+
+  useEffect(() => {
+    const loadModel = async () => {
+      const nsfwjs = await import('nsfwjs')
+      const loadedModel = await nsfwjs.load('MobileNetV2')
+      setModel(loadedModel)
+      // setLoading(false)
+    }
+
+    loadModel()
+  }, [])
 
   const isSmallScreen = useMediaQuery('(max-width: 768px)')
 
@@ -298,9 +303,11 @@ export function DesignConfigurador() {
   async function onSubmit({
     delivery,
     email,
+    isPublic,
   }: {
     email: string
     delivery: DeliveryOption
+    isPublic: boolean
   }) {
     try {
       if (!previewFile) {
@@ -312,25 +319,52 @@ export function DesignConfigurador() {
 
       const { url, accessKey } = await uploadFile(previewFile)
 
+      if (!model) {
+        return
+      }
+
+      const imageUrl = URL.createObjectURL(previewFile)
+
+      // Criar uma imagem a partir do arquivo
+      const image = new Image()
+      image.src = imageUrl
+
+      // biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
+      await new Promise((resolve) => (image.onload = resolve))
+
+      const predictions = await model.classify(image)
+
+      const nsfwPredictions = predictions.filter(
+        (prediction) =>
+          prediction.className === 'Porn' || prediction.className === 'Hentai',
+      )
+
+      // Verificar se alguma previsão NSFW tem alta probabilidade
+      const isNSFW = nsfwPredictions.some(
+        (prediction) => prediction.probability > 0.5,
+      )
+
       const data = await finishCustomization({
         email,
         imageUrl: url,
         deliveryMethod: delivery,
         accessKey,
+        isNSFW,
+        isPublic,
       })
 
       if (!data?.data) {
         return
       }
 
-      const { purschase, user } = data.data
+      const { purchase, user } = data.data
 
       const stripeClient = await loadStripe(env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY)
 
       if (!stripeClient) throw new Error('Stripe failed to initialize.')
 
       const session = await createCheckout({
-        purchaseId: purschase[0].id,
+        purchaseId: purchase[0].id,
         email: user.email,
       })
 

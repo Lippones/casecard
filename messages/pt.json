@@ -77,6 +77,10 @@
 				"email": {
 					"description": "O e-mail para onde enviaremos o adesivo"
 				},
+				"isPublic": {
+					"title": "Compartilhar com a Comunidade",
+					"description": "Permita que outras pessoas vejam e se inspirem com esta arte. Ao compartilhar, sua criação poderá ser exibida publicamente na plataforma."
+				},
 				"continue": "Prosseguir para o Pagamento"
 			}
 		}
@@ -96,12 +100,21 @@
 		"termsOfService": "Termos de Uso",
 		"privacyPolicy": "Política de Privacidade",
 		"developedBy": "Desenvolvido por",
-		"copyright": "© 2021 Casecard. Todos os direitos reservados.",
+		"copyright": "© {year} Casecard. Todos os direitos reservados.",
 		"followMe": "Siga-me"
 	},
 	"errors": {
 		"deliveryQuota": "Infelizmente, esgotamos nossa cota para entregas em domicílio. Por favor, prossiga com a entrega por e-mail para o seu pedido.",
 		"notFound": "não foi possível encontrar {item}",
 		"unexpected": "Ocorreu um erro inesperado. Por favor, tente novamente mais tarde. {complement}"
+	},
+	"community": {
+		"title": "Veja as criações recentes da comunidade",
+		"sensitiveContent": {
+			"title": "Sensitive Content",
+			"description": "Some shared images may contain inappropriate content. We apply a filter to blur sensitive images, but it is not 100% accurate. To proceed, you must be at least 18 years old.",
+			"confirm": "Confirm and Continue",
+			"cancel": "Exit"
+		}
 	}
 }

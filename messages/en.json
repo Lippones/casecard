@@ -77,6 +77,10 @@
 				"email": {
 					"description": "The email we will send the sticker to"
 				},
+				"isPublic": {
+					"title": "Share with the Community",
+					"description": "Allow others to see and be inspired by your art. By sharing, your creation may be publicly displayed on the platform."
+				},
 				"continue": "Proceed to Checkout"
 			}
 		}
@@ -96,12 +100,21 @@
 		"termsOfService": "Terms of Use",
 		"privacyPolicy": "Privacy Policy",
 		"developedBy": "Developed by",
-		"copyright": "© 2021 Casecard. All rights reserved.",
+		"copyright": "© {year} Casecard. All rights reserved.",
 		"followMe": "Follow me"
 	},
 	"errors": {
 		"deliveryQuota": "Unfortunately, we have exhausted our quota for home delivery. Please proceed with email delivery for your order.",
 		"notFound": "it was not possible to find {item}",
 		"unexpected": "An unexpected error occurred. Please try again later. {complement}"
+	},
+	"community": {
+		"title": "See recent community creations",
+		"sensitiveContent": {
+			"title": "Conteúdo Sensível",
+			"description": "Algumas imagens compartilhadas podem conter conteúdo impróprio. Aplicamos um filtro para desfocar imagens sensíveis, mas ele não é 100% preciso. Para continuar, você deve ter pelo menos 18 anos.",
+			"confirm": "Confirmar e Continuar",
+			"cancel": "Sair"
+		}
 	}
 }

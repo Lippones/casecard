@@ -3,6 +3,7 @@ import type { ReactNode } from 'react'
 import { ThemeProvider } from './theme-provider'
 import { Toaster } from './ui/toaster'
 import { CSPostHogProvider } from './cs-post-hog-provider'
+import { NuqsAdapter } from 'nuqs/adapters/next/app'
 
 interface ProvidersProps {
   children: ReactNode
@@ -17,7 +18,9 @@ export function Providers({ children, messages }: ProvidersProps) {
         defaultTheme="dark"
         forcedTheme="dark"
         disableTransitionOnChange>
-        <CSPostHogProvider>{children}</CSPostHogProvider>
+        <CSPostHogProvider>
+          <NuqsAdapter>{children}</NuqsAdapter>
+        </CSPostHogProvider>
         <Toaster />
       </ThemeProvider>
     </NextIntlClientProvider>

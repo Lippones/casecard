@@ -8,6 +8,20 @@
       "when": 1729622033179,
       "tag": "0000_daffy_beyonder",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1738342435704,
+      "tag": "0001_charming_strong_guy",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1738609477345,
+      "tag": "0002_left_strong_guy",
+      "breakpoints": true
     }
   ]
 }
