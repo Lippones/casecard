@@ -13,11 +13,11 @@ export default async function Success(props: {
 }) {
   const params = await props.params
 
-  const { purchase } = await getPurchase(params.id)
+  const { artworks, purchases } = await getPurchase(params.id)
 
   const t = await getTranslations('success')
 
-  if (!purchase) {
+  if (!purchases) {
     return <h1>{t('error')}</h1>
   }
 
@@ -28,11 +28,14 @@ export default async function Success(props: {
       </Suspense>
       <h1 className="text-primary font-medium text-xl">{t('title')}</h1>
       <p className="text-4xl font-semibold text-center">{t('description')}</p>
-      {purchase.deliveryMethod === 'email' && (
+      {purchases.deliveryMethod === 'email' && (
         <p className="text-muted-foreground">{t('message.email')}</p>
       )}
       <div className="max-w-[700px] w-full">
-        <Preview accessKey={purchase.accessKey} />
+        <Preview
+          nsfw={artworks?.nsfw ?? false}
+          accessKey={artworks?.accessKey ?? ''}
+        />
         <Button size={'lg'} className="mt-6 w-full" asChild>
           <Link href="/">{t('backButton')}</Link>
         </Button>
