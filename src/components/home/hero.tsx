@@ -25,7 +25,7 @@ export async function Hero() {
             asChild
             variant={'link'}
             className="text-base text-muted-foreground py-6">
-            <Link href="/comunidade">{t('community')}</Link>
+            <Link href="/community">{t('community')}</Link>
           </Button>
           <Button asChild className="h-auto font-bold text-base px-8 py-4">
             <Link href="/editor">{t('action')}</Link>
